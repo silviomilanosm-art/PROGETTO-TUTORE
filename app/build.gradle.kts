@@ -9,13 +9,15 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        // NON CAMBIARE: mantenere lo stesso applicationId consente agli aggiornamenti
-        // di installarsi sopra la versione precedente senza cancellare i dati.
+        // NON CAMBIARE: stesso applicationId = aggiornamento sopra l'app esistente.
         applicationId = "it.progettotutore.app"
         minSdk = 26
         targetSdk = 35
-        versionCode = 2
-        versionName = "0.2.0"
+
+        // In GitHub Actions ogni build riceve automaticamente un numero crescente.
+        val ciRun = System.getenv("GITHUB_RUN_NUMBER")?.toIntOrNull()
+        versionCode = ciRun?.plus(100) ?: 2
+        versionName = if (ciRun != null) "0.2.$ciRun" else "0.2.0"
     }
 
     buildFeatures {
