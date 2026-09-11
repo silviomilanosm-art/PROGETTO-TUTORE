@@ -187,7 +187,7 @@ private fun HomeScreen(pazienti: List<Paziente>, tutori: List<TutoreSalvato>, on
     if (tutori.isNotEmpty()) {
         Text("Ultimo lavoro", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
         val ultimo = tutori.maxByOrNull { it.creatoIl }!!
-        TutorePreview(ultimo.misure, exploded = true)
+        TutorePreview(ultimo.misure, exploded = false)
     }
 }
 
@@ -293,7 +293,12 @@ private fun ArchivioScreen(
                     HorizontalDivider()
                     Text(t.nome, fontWeight = FontWeight.SemiBold)
                     Text(SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ITALY).format(Date(t.creatoIl)), style = MaterialTheme.typography.bodySmall)
+                    Text("Vista del tutore salvato", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                    Text("Puoi passare tra 2D e 3D e, nella vista 3D, mostrare o nascondere le misure.", style = MaterialTheme.typography.bodySmall)
+                    TutorePreview(t.misure, exploded = false)
+                    Text("Pezzi calcolati", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                     LegendaPezzi(calcolaPezzi(t.misure))
+                    Text("Esploso", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                     TutorePreview(t.misure, exploded = true)
                     OutlinedButton(onClick = { deleteTutore = t }, modifier = Modifier.fillMaxWidth()) { Text("Elimina questo tutore") }
                 }
