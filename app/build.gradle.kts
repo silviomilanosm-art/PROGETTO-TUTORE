@@ -9,15 +9,18 @@ android {
     compileSdk = 35
 
     defaultConfig {
+        // NON CAMBIARE: mantenere lo stesso applicationId consente agli aggiornamenti
+        // di installarsi sopra la versione precedente senza cancellare i dati.
         applicationId = "it.progettotutore.app"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = 2
+        versionName = "0.2.0"
     }
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     compileOptions {
