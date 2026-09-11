@@ -33,6 +33,8 @@ Perché gli APK futuri possano realmente sovrapporsi a quello già installato, G
 
 Quando i secret sono presenti, il workflow produce `ProgettoTutore-update.apk` firmato con la chiave stabile. Senza questi secret viene creato un APK debug di prova, che non deve essere considerato il canale definitivo di aggiornamento.
 
+Configurazione della firma permanente completata nel repository; le build successive vengono verificate tramite GitHub Actions.
+
 ## Backup
 Dalla schermata **Dati** si può esportare l'intero archivio in un file JSON e successivamente importarlo. È consigliato fare un backup prima di cambi importanti o trasferimenti su un altro dispositivo.
 
