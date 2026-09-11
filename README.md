@@ -35,6 +35,8 @@ Quando i secret sono presenti, il workflow produce `ProgettoTutore-update.apk` f
 
 Configurazione della firma permanente completata nel repository; le build successive vengono verificate tramite GitHub Actions.
 
+Nuova build richiesta per verificare aggiornamento e firma permanente.
+
 ## Backup
 Dalla schermata **Dati** si può esportare l'intero archivio in un file JSON e successivamente importarlo. È consigliato fare un backup prima di cambi importanti o trasferimenti su un altro dispositivo.
 
