@@ -4,10 +4,12 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -29,7 +31,6 @@ fun TutorePreview(m: Misure, exploded: Boolean = false) {
     val safeHand = (m.larghezzaMcp.takeIf { it > 0 } ?: 8.0).coerceIn(5.0, 12.0)
     val safeFore = (m.avambraccio.takeIf { it > 0 } ?: 24.0).coerceIn(15.0, 40.0)
     val safeLen = (m.lunghezzaAvambraccio.takeIf { it > 0 } ?: 18.0).coerceIn(10.0, 30.0)
-    val spread = if (exploded) 1f else 0f
 
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Canvas(
@@ -47,7 +48,6 @@ fun TutorePreview(m: Misure, exploded: Boolean = false) {
             val bodyH = (h * (0.48f + ((safeLen - 10.0) / 20.0 * .10f).toFloat())).coerceAtMost(h * .63f)
             val top = if (exploded) h * .22f else h * .16f
 
-            // A - base principale
             val aShift = if (exploded) Offset(-w * .18f, h * .16f) else Offset.Zero
             val path = Path().apply {
                 moveTo(cx - handW / 2 + aShift.x, top + aShift.y)
@@ -59,44 +59,19 @@ fun TutorePreview(m: Misure, exploded: Boolean = false) {
             drawPath(path, PieceColors[0])
             drawPath(path, Color.Black.copy(alpha = .18f), style = Stroke(width = 2f))
 
-            // E - copertura mano
             val eShift = if (exploded) Offset(w * .20f, -h * .02f) else Offset.Zero
-            drawRoundRect(
-                color = PieceColors[4],
-                topLeft = Offset(cx - handW * .46f + eShift.x, top - h * .08f + eShift.y),
-                size = Size(handW * .92f, h * .18f),
-                cornerRadius = androidx.compose.ui.geometry.CornerRadius(20f, 20f)
-            )
+            drawRoundRect(PieceColors[4], Offset(cx - handW * .46f + eShift.x, top - h * .08f + eShift.y), Size(handW * .92f, h * .18f), CornerRadius(20f, 20f))
 
-            // B - fascia polso
             val bShift = if (exploded) Offset(w * .22f, h * .18f) else Offset.Zero
-            drawRoundRect(
-                color = PieceColors[1],
-                topLeft = Offset(cx - baseW * .63f + bShift.x, top + bodyH * .34f + bShift.y),
-                size = Size(baseW * 1.26f, h * .075f),
-                cornerRadius = androidx.compose.ui.geometry.CornerRadius(18f, 18f)
-            )
+            drawRoundRect(PieceColors[1], Offset(cx - baseW * .63f + bShift.x, top + bodyH * .34f + bShift.y), Size(baseW * 1.26f, h * .075f), CornerRadius(18f, 18f))
 
-            // C - fascia avambraccio
             val cShift = if (exploded) Offset(-w * .22f, h * .08f) else Offset.Zero
-            drawRoundRect(
-                color = PieceColors[2],
-                topLeft = Offset(cx - baseW * .66f + cShift.x, top + bodyH * .69f + cShift.y),
-                size = Size(baseW * 1.32f, h * .075f),
-                cornerRadius = androidx.compose.ui.geometry.CornerRadius(18f, 18f)
-            )
+            drawRoundRect(PieceColors[2], Offset(cx - baseW * .66f + cShift.x, top + bodyH * .69f + cShift.y), Size(baseW * 1.32f, h * .075f), CornerRadius(18f, 18f))
 
-            // D - fascia palmare
             val dShift = if (exploded) Offset(w * .25f, -h * .11f) else Offset.Zero
-            drawRoundRect(
-                color = PieceColors[3],
-                topLeft = Offset(cx - handW * .66f + dShift.x, top + h * .07f + dShift.y),
-                size = Size(handW * 1.32f, h * .06f),
-                cornerRadius = androidx.compose.ui.geometry.CornerRadius(16f, 16f)
-            )
+            drawRoundRect(PieceColors[3], Offset(cx - handW * .66f + dShift.x, top + h * .07f + dShift.y), Size(handW * 1.32f, h * .06f), CornerRadius(16f, 16f))
 
             if (exploded) {
-                // linee guida dell'esploso
                 drawLine(Color.Black.copy(alpha = .18f), Offset(cx, top + h * .12f), Offset(cx, top + bodyH * .93f), strokeWidth = 2f)
             }
         }
@@ -113,14 +88,49 @@ fun LegendaPezzi(pezzi: List<Pezzo>) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         pezzi.forEach { p ->
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                Box(
-                    modifier = Modifier
-                        .size(18.dp)
-                        .background(PieceColors[p.colorIndex], RoundedCornerShape(5.dp))
-                )
+                Box(modifier = Modifier.size(18.dp).background(PieceColors[p.colorIndex], RoundedCornerShape(5.dp)))
                 Column {
                     Text("${p.codice} · ${p.nome}", fontWeight = FontWeight.SemiBold)
                     Text(p.dimensione, style = MaterialTheme.typography.bodySmall)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun GalleriaPezzi(pezzi: List<Pezzo>) {
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        pezzi.forEachIndexed { index, p ->
+            ElevatedCard(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(20.dp)) {
+                Row(modifier = Modifier.padding(14.dp), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+                    Canvas(
+                        modifier = Modifier
+                            .size(width = 110.dp, height = 92.dp)
+                            .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(16.dp))
+                            .padding(10.dp)
+                    ) {
+                        val c = PieceColors[p.colorIndex]
+                        when (index) {
+                            0 -> {
+                                val path = Path().apply {
+                                    moveTo(size.width * .33f, size.height * .12f)
+                                    lineTo(size.width * .67f, size.height * .12f)
+                                    lineTo(size.width * .82f, size.height * .88f)
+                                    lineTo(size.width * .18f, size.height * .88f)
+                                    close()
+                                }
+                                drawPath(path, c)
+                            }
+                            1, 2, 3 -> drawRoundRect(c, Offset(size.width * .08f, size.height * .38f), Size(size.width * .84f, size.height * .25f), CornerRadius(18f, 18f))
+                            else -> drawRoundRect(c, Offset(size.width * .18f, size.height * .18f), Size(size.width * .64f, size.height * .64f), CornerRadius(22f, 22f))
+                        }
+                    }
+                    Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Text("${p.codice} · ${p.nome}", fontWeight = FontWeight.Bold)
+                        Text(p.dimensione, style = MaterialTheme.typography.bodyMedium)
+                        Text(p.nota, style = MaterialTheme.typography.bodySmall)
+                    }
                 }
             }
         }
